@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+  {% block content %}
+        
+  <main id="main">
+    <section>
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-9" data-aos="fade-up">
+            {% for post in object_list %}
+          
+            <div class="d-md-flex post-entry-2 half">
+              <a href="{% url 'article-detail' post.pk %}" class="me-4 thumbnail">
+                {% if post.header_image %}
+                <img src="{{ post.header_image.url }}" alt="" class="img-fluid" style="border-image: 900px 751px;">
+                {% endif %}
+              </a>
+              <div>
+                <div class="post-meta"><span class="date"> <a href="{% url 'category' post.category|slugify %}">{{ post.category | title}}</a> </span> <span class="mx-1">&bullet;</span> <span>{{ post.post_date }}</span>
+                    {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                        <small><a href="{% url 'update_post' post.pk %}">Edit</a>
+                        <a href="{% url 'delete_post' post.pk %}">Delete</a> </small>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <h3><a href="{% url 'article-detail' post.pk %}">{{post.title}}</a></h3>
+                <p>{{post.subtitle | truncatewords:20|safe }}</p>
+                <div class="d-flex align-items-center author">
+                  <div class="photo">
+                      {% if post.author.profile.profile_pic %}
+                      <img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid"> 
+                      {% else %}
+                      <img src="{% static 'ablog\images\male.png' %}" class="img-fluid">
+                      {% endif %} 
+                    </div>
+                  <div class="name">
+                    <h3 class="m-0 p-0">{{post.author.first_name}} {{post.author.last_name}}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% endfor %}
+
+            <div class="text-start py-4">
+                {% load main_extra %}
+              <div class="custom-pagination">
+                {% if page_obj.has_previous %}
+                <a href="{% url 'home' %}?page={{page_obj.previous_page_number}}" class="prev">Prevous</a>
+                {% endif %}
+
+                {% for page_number in page_obj.number|page_window:page_obj.paginator.num_pages %}
+
+                <a href="?page={{ page_number }}" class="{% if page_number == page_obj.number %} active {% endif %}">
+                    {{ page_number }}
+                    {% if page_number == page_obj.number %}
+                                
+                    {% endif %}
+                </a>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <a href="{% url 'home' %}?page={{page_obj.next_page_number}}" class="next">Next</a>
+                {% endif %}  
+            </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <!-- ======= Sidebar ======= -->
+            <div class="aside-block">
+
+              <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+               
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="pills-tabContent">
+
+                <!-- Popular -->
+                <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+                  {% for post in few_post %}
+                  <div class="post-entry-1 border-bottom">
+                    <div class="post-meta"><span class="date">{{ post.category | title}}</span> <span class="mx-1">&bullet;</span> <span>{{ post.post_date }}</span></div>
+                    <h2 class="mb-2"><a href="{% url 'article-detail' post.pk %}">{{post.title}}</a></h2>
+                    <span class="author mb-3 d-block">{{post.author.first_name}} {{post.author.last_name}}</span>
+                  </div>
+                  {% endfor %}
+                </div> <!-- End Popular -->
+
+              </div>
+            </div>
+
+            
+            {% if cat_menu %}
+            <div class="aside-block">
+              <h3 class="aside-title">Categories</h3>
+              <ul class="aside-links list-unstyled">
+                {% for item in cat_menu%}
+                <li><a href="{% url 'category' item|slugify %}"><i class="bi bi-chevron-right"></i> {{item | title }}</a></li>
+                {% endfor %}
+              </ul>
+            </div><!-- End Categories -->
+            {% endif %}
+
+        
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main><!-- End #main -->
+  {% endblock %}
+

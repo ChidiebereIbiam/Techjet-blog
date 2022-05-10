@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %} 
+{{ post.title }} | Edenblog
+{% endblock %}
+
+{% block content %}
+  <main id="main">
+
+    <section class="single-post-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 post-content" data-aos="fade-up">
+
+            <!-- ======= Single Post Content ======= -->
+            <div class="single-post">
+              <div class="post-meta"><span class="date">{{ post.category | title}}</span> <span class="mx-1">&bullet;</span> <span>{{ post.post_date }}</span>
+                {% if user.is_authenticated %}
+                {% if user.id == post.author.id %}
+                    <small><a href="{% url 'update_post' post.pk %}">Edit</a>
+                    <a href="{% url 'delete_post' post.pk %}">Delete</a> </small>
+                {% endif %}
+            {% endif %}
+            
+            </div>
+              <h1 class="mb-5">{{ post.title }}</h1>
+              
+              <figure class="my-4">
+                {% if post.header_image %}
+                <img src="{{ post.header_image.url }}" alt="" class="img-fluid">
+                {% endif %}
+                <figcaption></figcaption>
+              </figure>
+
+              <p>{{ post.body | safe}}</p>
+
+              
+               </div><!-- End Single Post Content -->
+
+            
+               <section class="author-box">
+                {% if post.author.profile.profile_pic %}
+                 <img alt="" title="Gravatar for Kaushik Battu" src="{{ post.author.profile.profile_pic.url }}" srcset="" class="avatar avatar-90 photo" height="90" width="90" loading="lazy" decoding="async" fetchpriority="low"><h4 class="author-box-title">
+                  {% else %}
+                  <img alt="" title="Gravatar for Kaushik Battu" src="{% static 'ablog\images\male.png' %}" srcset="" class="avatar avatar-90 photo" height="90" width="90" loading="lazy" decoding="async" fetchpriority="low"><h4 class="author-box-title">
+                  {% endif %}
+                  <span><a href="{% url 'show_profile_page' post.author.profile.id %}">{{ post.author.first_name }} {{post.author.last_name}} </a></span>
+                <span class="gd_authorbio_links">
+                
+                  {% if post.author.profile.facebook_url %}
+                <a href="{{ post.author.profile.facebook_url }}" target="_blank" rel="nofollow external noopener noreferrer" data-wpel-link="external" class="ext-link facebook">
+                  <i class="bi bi-facebook"></i>
+                </a>
+                {% endif %}
+                
+                {% if post.author.profile.twitter_url  %}
+                <a href="{{ post.author.profile.twitter_url }}" target="_blank" rel="nofollow external noopener noreferrer" data-wpel-link="external" class="ext-link twitter">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                {% endif %}
+                
+                {% if post.author.profile.instagram_url %}
+                <a href="{{ post.author.profile.instagram_url }}" target="_blank" rel="nofollow external noopener noreferrer" data-wpel-link="external" class="ext-link instagram">
+                  <i class="bi bi-instagram"></i>
+                </a>
+                {% endif %}
+                 
+                </span>
+                </h4>
+                <div class="author-box-content" itemprop="description">
+                <p>{{ post.author.profile.bio }}</p>
+                </div></section>
+
+
+                    <!-- Card Stuff Ends -->
+            
+
+          </div>
+          
+        </div>
+      </div>
+    </section>
+  </main><!-- End #main -->
+  {% endblock %}
