@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block pageheader %}
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('../../static/assets/img/home-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Clean Blog</h1>
+                            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+{% endblock %}
+
+{% block content %}
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- Post preview-->
+            {% for post in object_list %}
+            <div class="post-preview">
+                <a href="{% url 'article-detail' post.pk %}">
+                    <h2 class="post-title">{{post.title}}</h2>
+                    <h3 class="post-subtitle">{{post.subtitle | truncatewords:20|safe }}</h3>
+                </a>
+                <p class="post-meta">
+                    Posted by
+                    <a href="#!">{{post.author.first_name}} {{post.author.last_name}}</a>
+                    on {{ post.post_date }} <small><a href="{% url 'category' post.category|slugify %}">{{ post.category | title}} </a> </small>
+                    {% if user.is_authenticated %}
+                        {% if user.id == post.author.id %}
+                            - <small><a href="{% url 'update_post' post.pk %}">Edit</a> 
+                            - <a href="{% url 'delete_post' post.pk %}">Delete</a> </small> 
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>
+            <!-- Divider-->
+            <hr class="my-4" />
+            {% endfor %}
+            <!-- Pager-->
+            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+            
+        </div>
+    </div>
+</div>
+    
+    
+{% endblock %}

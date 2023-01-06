@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<main id="main">
+    <section>
+      <div class="container">
+        <div class="row">
+            {% if category_posts %}
+            <h3 align="center">{{ cats }}</h3>
+            <!-- Post preview-->
+
+          <div class="col-md-9" data-aos="fade-up">
+            {% for post in category_posts %}
+          
+            <div class="d-md-flex post-entry-2 half">
+              <a href="single-post.html" class="me-4 thumbnail">
+                {% if post.header_image %}
+                <img src="{{ post.header_image.url }}" alt="" class="img-fluid" style="border-image: 900px 751px;">
+                {% endif %}
+              </a>
+              <div>
+                <div class="post-meta"><span class="date"> <a href="{% url 'category' post.category|slugify %}">{{ post.category | title}}</a> </span> <span class="mx-1">&bullet;</span> <span>{{ post.post_date }}</span>
+                    {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                        <small><a href="{% url 'update_post' post.pk %}">Edit</a>
+                        <a href="{% url 'delete_post' post.pk %}">Delete</a> </small>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <h3><a href="{% url 'article-detail' post.pk %}">{{post.title}}</a></h3>
+                <p>{{post.subtitle | truncatewords:20|safe }}</p>
+                <div class="d-flex align-items-center author">
+                  <div class="photo">
+                      {% if post.author.profile.profile_pic %}
+                      <img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid"> 
+                      {% else %}
+                      <img src="{% static 'ablog\images\male.png' %}" class="img-fluid">
+                      {% endif %} 
+                    </div>
+                  <div class="name">
+                    <h3 class="m-0 p-0">{{post.author.first_name}} {{post.author.last_name}}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% endfor %}
+
+          </div>
+          {% else %}
+          <h2> Sorry this page does not exit </h2>
+
+      {% endif %}
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+    
+{% endblock %}

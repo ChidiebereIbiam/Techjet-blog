@@ -1,0 +1,36 @@
+{% extends 'base2.html' %}
+
+{% block title %} 
+Comment on Post | Edenblog
+{% endblock %}
+
+{% block pageheader %}
+    <br>
+    <br>
+    <br>
+
+{% endblock %}
+
+{% block content %}
+
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        
+                        <h1>Add Comment</h1>
+                        <div class="form-group">
+                            <form action="" method="post" >
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button class="btn btn-secondary">Comment</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </article>
+
+{% endblock %}

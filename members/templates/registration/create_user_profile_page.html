@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+Create Profile Page | TechJet
+{% endblock %}
+
+
+{% block content %}
+<br>
+    <br>
+    <br>
+    <br>
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        {% if user.is_authenticated %}
+                        <h1>Create Profile Page</h1>
+                        <div class="form-group">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                {{ form.as_p }}
+                                <button class="btn btn-secondary">Create</button>
+                            </form>
+                        </div>
+                        
+                        {% else %}
+                        <p>You're not allowed here! (and you know it...)</p>
+    
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </article>
+
+{% endblock %}
